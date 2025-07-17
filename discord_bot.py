@@ -316,44 +316,39 @@ def create_leaderboard_embed(leaderboard_data: Dict[str, Any]) -> discord.Embed:
         color=EMBED_COLOR
     )
     
-# Add players
-leaderboard_text = ""
-for player in players:
-    position = player.get('position', 0)
-    name = player.get('name', 'Unknown')
-    rank = player.get('rank', 'recruit')
-    value = player.get('value', 0)
-
-    if value >= 1_600_000:
-        rank = "legend-premium"
-
-    rank_emoji = get_rank_emoji(rank)
-
-    # Add special formatting for top 3
-    if position == 1:
-        leaderboard_text += f"🥇 **{position}.** {rank_emoji} **{name}** - {format_number(value)}\n"
-    elif position == 2:
-        leaderboard_text += f"🥈 **{position}.** {rank_emoji} **{name}** - {format_number(value)}\n"
-    elif position == 3:
-        leaderboard_text += f"🥉 **{position}.** {rank_emoji} **{name}** - {format_number(value)}\n"
+    # Add players
+    leaderboard_text = ""
+    for player in players:
+        position = player.get('position', 0)
+        name = player.get('name', 'Unknown')
+        rank = player.get('rank', 'recruit')
+        value = player.get('value', 0)
+        
+        rank_emoji = get_rank_emoji(rank)
+        
+        # Add special formatting for top 3
+        if position == 1:
+            leaderboard_text += f"🥇 **{position}.** {rank_emoji} **{name}** - {format_number(value)}\n"
+        elif position == 2:
+            leaderboard_text += f"🥈 **{position}.** {rank_emoji} **{name}** - {format_number(value)}\n"
+        elif position == 3:
+            leaderboard_text += f"🥉 **{position}.** {rank_emoji} **{name}** - {format_number(value)}\n"
+        else:
+            leaderboard_text += f"**{position}.** {rank_emoji} {name} - {format_number(value)}\n"
+    
+    if leaderboard_text:
+        embed.add_field(
+            name="Rankings",
+            value=leaderboard_text.strip(),
+            inline=False
+        )
     else:
-        leaderboard_text += f"**{position}.** {rank_emoji} {name} - {format_number(value)}\n"
-
-# This part should be OUTSIDE the for-loop
-if leaderboard_text:
-    embed.add_field(
-        name="Rankings",
-        value=leaderboard_text.strip(),
-        inline=False
-    )
-else:
-    embed.add_field(
-        name="Rankings",
-        value="No players found for this category.",
-        inline=False
-    )
-
-
+        embed.add_field(
+            name="Rankings",
+            value="No players found for this category.",
+            inline=False
+        )
+    
     # Add footer
     embed.set_footer(text="RTanks Online | Use < and > buttons to navigate")
     
