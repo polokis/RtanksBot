@@ -319,10 +319,14 @@ def create_leaderboard_embed(leaderboard_data: Dict[str, Any]) -> discord.Embed:
     # Add players
     leaderboard_text = ""
     for player in players:
-        position = player.get('position', 0)
-        name = player.get('name', 'Unknown')
-        rank = player.get('rank', 'recruit')
-        value = player.get('value', 0)
+    position = player.get('position', 0)
+    name = player.get('name', 'Unknown')
+    rank = player.get('rank', 'recruit')
+    value = player.get('value', 0)
+
+    if value >= 1_600_000:
+        rank = "legend-premium"
+
         
         rank_emoji = get_rank_emoji(rank)
         
