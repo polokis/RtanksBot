@@ -23,4 +23,5 @@ async def main():
         await bot.close()
 
 if __name__ == "__main__":
+    keep_alive()
     asyncio.run(main())
