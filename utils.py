@@ -35,7 +35,7 @@ def parse_rank_from_image(img_url: str) -> str:
         "paF1myt": "marshal",
         "wPZnaG0": "field-marshal",
         "Or6Ajto": "commander",
-        "OQEHkm7": "generalissimo"
+        "OQEHkm7": "generalissimo",
         "rO3Hs5f": "legend-premium"
     }
     
