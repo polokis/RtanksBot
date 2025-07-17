@@ -1,6 +1,8 @@
 import asyncio
 import os
 from discord_bot import RTanksBot
+from keep_alive import keep_alive
+
 
 async def main():
     # Get Discord bot token from environment
