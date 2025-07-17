@@ -36,6 +36,7 @@ def parse_rank_from_image(img_url: str) -> str:
         "wPZnaG0": "field-marshal",
         "Or6Ajto": "commander",
         "OQEHkm7": "generalissimo"
+        "rO3Hs5f": "legend-premium"
     }
     
     return rank_mapping.get(filename, "recruit")
