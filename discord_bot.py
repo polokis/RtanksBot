@@ -316,9 +316,9 @@ def create_leaderboard_embed(leaderboard_data: Dict[str, Any]) -> discord.Embed:
         color=EMBED_COLOR
     )
     
-    # Add players
-    leaderboard_text = ""
-    for player in players:
+   # Add players
+leaderboard_text = ""
+for player in players:
     position = player.get('position', 0)
     name = player.get('name', 'Unknown')
     rank = player.get('rank', 'recruit')
@@ -327,9 +327,8 @@ def create_leaderboard_embed(leaderboard_data: Dict[str, Any]) -> discord.Embed:
     if value >= 1_600_000:
         rank = "legend-premium"
 
-        
-        rank_emoji = get_rank_emoji(rank)
-        
+    rank_emoji = get_rank_emoji(rank)
+
         # Add special formatting for top 3
         if position == 1:
             leaderboard_text += f"🥇 **{position}.** {rank_emoji} **{name}** - {format_number(value)}\n"
