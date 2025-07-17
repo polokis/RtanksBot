@@ -339,7 +339,7 @@ for player in players:
     else:
         leaderboard_text += f"**{position}.** {rank_emoji} {name} - {format_number(value)}\n"
 
-# After the loop ends, add this:
+# This part should be OUTSIDE the for-loop
 if leaderboard_text:
     embed.add_field(
         name="Rankings",
@@ -352,6 +352,7 @@ else:
         value="No players found for this category.",
         inline=False
     )
+
 
     # Add footer
     embed.set_footer(text="RTanks Online | Use < and > buttons to navigate")
