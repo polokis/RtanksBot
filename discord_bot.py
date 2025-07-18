@@ -270,6 +270,72 @@ def create_player_embed(player_data: dict) -> discord.Embed:
         ),
         inline=False
     )
+    # Add experience info
+    experience = player_data.get('experience', {})
+    if experience:
+        next_threshold = experience.get('next_threshold')
+        if next_threshold:
+            embed.add_field(
+                name="Experience",
+                value=f"{format_number(experience.get('current_xp', 0))} / {format_number(next_threshold)}",
+                inline=True
+            )
+        else:
+            embed.add_field(
+                name="Experience",
+                value=f"{format_number(experience.get('current_xp', 0))} (Max Rank)",
+                inline=True
+            )
+    
+    # Add personal stats
+    stats = player_data.get('personal_stats', {})
+    if stats:
+        kills = stats.get('kills', 0)
+        deaths = stats.get('deaths', 0)
+        kd_ratio = stats.get('kd_ratio', 0.0)
+        
+        embed.add_field(
+            name="Combat Stats",
+            value=f"**Kills:** {format_number(kills)}\n**Deaths:** {format_number(deaths)}\n**K/D:** {kd_ratio}",
+            inline=True
+        )
+        
+        goldboxes = stats.get('goldboxes', 0)
+        premium = stats.get('premium', False)
+        group = stats.get('group', 'No Group')
+        
+        embed.add_field(
+            name="Other Stats",
+            value=f"{GOLDBOX_EMOJI} **Gold Boxes:** {format_number(goldboxes)}\n{PREMIUM_EMOJI if premium else '❌'} **Premium:** {'Yes' if premium else 'No'}\n**Group:** {group}",
+            inline=True
+        )
+    
+    # Add equipment info
+    equipment = player_data.get('equipment', {})
+    if equipment:
+        equipment_text = ""
+        
+        if equipment.get('turret'):
+            equipment_text += f"**Turret:** {equipment['turret']}\n"
+        
+        if equipment.get('hull'):
+            equipment_text += f"**Hull:** {equipment['hull']}\n"
+        
+        if equipment.get('paint'):
+            equipment_text += f"**Paint:** {equipment['paint']}\n"
+        
+        if equipment.get('resistances'):
+            equipment_text += f"**Resistances:** {', '.join(equipment['resistances'])}\n"
+        
+        if equipment_text:
+            embed.add_field(
+                name="Equipment",
+                value=equipment_text.strip(),
+                inline=False
+            )
+    
+    # Leaderboard positions removed as requested by user
+    
 
     return embed
 
