@@ -40,7 +40,7 @@ RANK_EMOJIS = {
     "field-marshal": "<:emoji_28:1394989205662339082>",
     "commander": "<:emoji_29:1394989245978116217>",
     "generalissimo": "<:emoji_30:1394989278005559378>",
-    "legend": "<:emoji_31:1394989379642064948>"
+    "legend": "<:emoji_31:1394989379642064948>",
     "legend-premium": "<:emoji_31:1394989379642064948>"
 }
 
