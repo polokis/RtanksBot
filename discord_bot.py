@@ -218,85 +218,59 @@ class LeaderboardView(discord.ui.View):
         for item in self.children:
             item.disabled = True
 
-def create_player_embed(player_data: Dict[str, Any]) -> discord.Embed:
-    """Create Discord embed for player profile."""
-    name = player_data.get('name', 'Unknown')
-    rank = player_data.get('rank', 'recruit')
-    
-    # Create embed
+def create_player_embed(player_data: dict) -> discord.Embed:
+    rank = player_data.get("rank", "Unknown").replace("-", " ").title()
+    rank_emoji = get_rank_emoji(player_data.get("rank", "recruit"))
+    name = player_data.get("name", "Unknown")
+
+    xp = format_number(player_data.get("experience", 0))
+    xp_needed = format_number(player_data.get("experience_needed", 0))
+
+    kills = format_number(player_data.get("kills", 0))
+    deaths = format_number(player_data.get("deaths", 0))
+    kd_ratio = round(player_data.get("kills", 0) / max(1, player_data.get("deaths", 1)), 2)
+
+    gold_boxes = format_number(player_data.get("gold_boxes", 0))
+    premium = "Yes" if player_data.get("premium", False) else "No"
+    group = player_data.get("group", "Unknown").title()
+
     embed = discord.Embed(
-        title=f"{get_rank_emoji(rank)} {name}",
-        description=f"**Rank:** {rank.replace('-', ' ').title()}",
-        color=EMBED_COLOR,
-        url=player_data.get('profile_url')
+        title=f"{rank_emoji} {name}",
+        color=EMBED_COLOR
     )
-    
-    # Add experience info
-    experience = player_data.get('experience', {})
-    if experience:
-        next_threshold = experience.get('next_threshold')
-        if next_threshold:
-            embed.add_field(
-                name="Experience",
-                value=f"{format_number(experience.get('current_xp', 0))} / {format_number(next_threshold)}",
-                inline=True
-            )
-        else:
-            embed.add_field(
-                name="Experience",
-                value=f"{format_number(experience.get('current_xp', 0))} (Max Rank)",
-                inline=True
-            )
-    
-    # Add personal stats
-    stats = player_data.get('personal_stats', {})
-    if stats:
-        kills = stats.get('kills', 0)
-        deaths = stats.get('deaths', 0)
-        kd_ratio = stats.get('kd_ratio', 0.0)
-        
-        embed.add_field(
-            name="Combat Stats",
-            value=f"**Kills:** {format_number(kills)}\n**Deaths:** {format_number(deaths)}\n**K/D:** {kd_ratio}",
-            inline=True
-        )
-        
-        goldboxes = stats.get('goldboxes', 0)
-        premium = stats.get('premium', False)
-        group = stats.get('group', 'No Group')
-        
-        embed.add_field(
-            name="Other Stats",
-            value=f"{GOLDBOX_EMOJI} **Gold Boxes:** {format_number(goldboxes)}\n{PREMIUM_EMOJI if premium else '❌'} **Premium:** {'Yes' if premium else 'No'}\n**Group:** {group}",
-            inline=True
-        )
-    
-    # Add equipment info
-    equipment = player_data.get('equipment', {})
-    if equipment:
-        equipment_text = ""
-        
-        if equipment.get('turret'):
-            equipment_text += f"**Turret:** {equipment['turret']}\n"
-        
-        if equipment.get('hull'):
-            equipment_text += f"**Hull:** {equipment['hull']}\n"
-        
-        if equipment.get('paint'):
-            equipment_text += f"**Paint:** {equipment['paint']}\n"
-        
-        if equipment.get('resistances'):
-            equipment_text += f"**Resistances:** {', '.join(equipment['resistances'])}\n"
-        
-        if equipment_text:
-            embed.add_field(
-                name="Equipment",
-                value=equipment_text.strip(),
-                inline=False
-            )
-    
-    # Leaderboard positions removed as requested by user
-    
+
+    embed.add_field(
+        name="Rank:",
+        value=rank,
+        inline=False
+    )
+
+    embed.add_field(
+        name="Experience",
+        value=f"{xp} / {xp_needed}",
+        inline=False
+    )
+
+    embed.add_field(
+        name="Combat Stats",
+        value=(
+            f"Kills: {kills}\n"
+            f"Deaths: {deaths}\n"
+            f"K/D: {kd_ratio}"
+        ),
+        inline=False
+    )
+
+    embed.add_field(
+        name="Other Stats",
+        value=(
+            f"🥇 Gold Boxes: {gold_boxes}\n"
+            f"🏆 Premium: {premium}\n"
+            f"Group: {group}"
+        ),
+        inline=False
+    )
+
     return embed
 
 def create_leaderboard_embed(leaderboard_data: Dict[str, Any]) -> discord.Embed:
